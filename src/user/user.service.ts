@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-user.dto';
-import { UpdateAuthDto } from './dto/update-user.dto';
+import { CreateAuthDto as CreateUserDto } from './dto/create-user.dto';
+import { UpdateAuthDto as UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(private readonly prismaService: PrismaService){}
 
-  create(createAuthDto: CreateAuthDto) {
-    this.prismaService.auth.create({data: createAuthDto}).then((res)=>{
+  create(createUserDto: CreateUserDto) {
+    this.prismaService.user.create({data: createUserDto}).then((res)=>{
       console.log("Usuário cadastrado")
       return res
     }).catch((error)=>{
@@ -24,7 +24,7 @@ export class AuthService {
     return `This action returns a #${id} auth`;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
+  update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} auth`;
   }
 
