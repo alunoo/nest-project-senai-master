@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService as UserService } from './user.service';
-import { CreateAuthDto } from './dto/create-user.dto';
-import { UpdateAuthDto } from './dto/update-user.dto';
+import { CreateUserDto as CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('User')
@@ -11,9 +11,9 @@ export class AuthController {
 
   @Post()
   @ApiOperation({summary: 'Criar novo usuário.'})
-  create(@Body() createAuthDto: CreateAuthDto) {
+  create(@Body() createUserDto: CreateUserDto) {
    try {
-     return this.userService.create(createAuthDto);
+     return this.userService.create(createUserDto);
    } catch (error) {
     console.log(error)
    }
@@ -33,8 +33,8 @@ export class AuthController {
 
   @Patch(':id')
   @ApiOperation({summary: 'Alterar dados do usuário.'})
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.userService.update(+id, updateAuthDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
