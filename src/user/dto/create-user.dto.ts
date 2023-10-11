@@ -18,6 +18,7 @@ export class CreateUserDto {
   })
     password: string;
 
+    @ApiProperty({ example: 'https://solvimm.com/wp-content/uploads/2019/01/DestacadaBlog_16.png'})
     @IsString()
     picture: string;
 }
