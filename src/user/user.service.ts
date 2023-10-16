@@ -27,20 +27,29 @@ export class UserService {
       delete element.password;
     });
     return data;
-    // return `This action returns all auth`;
+     return `This action returns all auth`;
   }
 
-  async findOne(id: string) {
-    const data: User = await this.prismaService.user.findUnique({
-      where: { id },
-    });
-
+  async findOne(id: string, email?:string) {
     try {
-      delete data.password;
+    //   if (id) {
+    //     const data: User = await this.prismaService.user.findUnique({
+    //       where: { id },
+    //     });
+    //   } else {
+    //     const data: User = await this.prismaService.user.findUnique({
+    //       where: { email },
+    //   });
 
+      // delete data.password;
+      const data: User = await this.prismaService.user.findUnique({
+        where: id ? { id } : { email }, 
+      });
+      id ? delete data.password : null
       return data;
+    
     } catch (error) {
-      return 'ID de usuário não existente !';
+      throw Error( 'ID de usuário não existente !');
     }
   }
 
