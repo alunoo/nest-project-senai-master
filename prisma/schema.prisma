@@ -18,5 +18,5 @@ model User {
   picture  String
   admin    Boolean @default(false)
 
-  @@map("User")
+  @@map("user")
 }

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto as CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto as UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from './entities/user.entity';
-import { throwIfEmpty } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -23,60 +22,61 @@ export class UserService {
 
   async findAll() {
     const data: User[] = await this.prismaService.user.findMany();
+
     data.forEach((element) => {
       delete element.password;
     });
+
     return data;
-     return `This action returns all auth`;
   }
 
-  async findOne(id: string, email?:string) {
+  async findOne(id?: string, email?: string) {
     try {
-    //   if (id) {
-    //     const data: User = await this.prismaService.user.findUnique({
-    //       where: { id },
-    //     });
-    //   } else {
-    //     const data: User = await this.prismaService.user.findUnique({
-    //       where: { email },
-    //   });
+      // if (id) {
+      //   const data: User = await this.prismaService.user.findUnique({
+      //     where: { id },
+      //   });
+      //   delete data.password
+      //   return data;
+      // } else{
+      //   const data: User = await this.prismaService.user.findUnique({
+      //     where: { email },
+      //   });
+      //   return data;
+      // }
 
-      // delete data.password;
       const data: User = await this.prismaService.user.findUnique({
-        where: id ? { id } : { email }, 
+        where: id ? { id } : { email }, // ternário tipo de if reduzido
       });
-      id ? delete data.password : null
+      id ? delete data.password : null;
       return data;
-    
+
+      // delete data.password; //comando para remover a senha do objeto
     } catch (error) {
-      throw Error( 'ID de usuário não existente !');
+      throw Error('Id de usuário não existente !');
     }
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateAuthDto: UpdateUserDto) {
     try {
       const data: User = await this.prismaService.user.update({
         where: { id },
-        data: updateUserDto,
+        data: updateAuthDto,
       });
 
-      delete data.password;
+      delete data.password; //comando para remover a senha do objeto
 
       return data;
     } catch (error) {
-      return 'ID de usuário não existente !';
+      return 'Id de usuário não existente !';
     }
   }
 
   async remove(id: string) {
     try {
-      await this.prismaService.user.delete({ where: {id} });
+      await this.prismaService.user.delete({ where: { id } });
     } catch (error) {
-      return 'ID de usuário não existente !';
+      return 'Id de usuário não existente !';
     }
-    return `This action removes a user: #${id} `;
   }
-}
-function findMany() {
-  throw new Error('Function not implemented.');
 }

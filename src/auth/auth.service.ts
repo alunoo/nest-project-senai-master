@@ -1,10 +1,10 @@
 // import { Injectable } from '@nestjs/common';
-// import { error } from 'console';
+// import { User } from 'src/user/entities/user.entity';
 // import { UserService } from 'src/user/user.service';
 
 // @Injectable()
 // export class AuthService {
-//   constructor(private usersService: UserService) {}
+//   constructor(private readonly usersService: UserService) {}
 
 //   async validateUser(
 //     email: string,
@@ -16,16 +16,17 @@
 //     picture: string;
 //     admin?: boolean;
 //   } | null> {
-//     const user = await this.usersService.findOne(email);
+//     const user: User = await this.usersService.findOne(email);
 //     if (user && user.password === password) {
 //       const { password, ...result } = user;
 //       return result;
 //     }
-//     throw error('Senha incorreta!');
+//     throw Error("Senha incorreta!");
 //   }
 // }
 
-import { Injectable, Dependencies } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -34,7 +35,7 @@ import { UserService } from 'src/user/user.service';
 export class AuthService {
   constructor(
     private usersService: UserService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async validateUser(
@@ -47,18 +48,20 @@ export class AuthService {
     picture: string;
     admin?: boolean;
   } | null> {
-    const user: User = await this.usersService.findOne(email);
+    const user: User = await this.usersService.findOne(undefined, email);
     if (user && user.password === password) {
       const { password, ...result } = user;
       return result;
     }
-    throw Error('Senha incorreta!');
+    throw Error("Senha incorreta!");
   }
 
   async login(user: User) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = user;
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 }
+
+
